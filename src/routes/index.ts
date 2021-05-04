@@ -8,7 +8,7 @@ const router = Router({ mergeParams: true })
 
 router.post('/login', AuthController.Login)
 
-router.post('/signin', AuthController.SignIn)
+router.post('/signup', AuthController.SignUp)
 
 router.post('/refresh', Auth.verifyRefresh, AuthController.Refresh)
 

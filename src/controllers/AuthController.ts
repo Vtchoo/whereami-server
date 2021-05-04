@@ -74,7 +74,7 @@ class AuthController {
         }
     }
 
-    static async SignIn(req: Request, res: Response, next: NextFunction) {
+    static async SignUp(req: Request, res: Response, next: NextFunction) {
 
         const data = { ...req.body }
 
