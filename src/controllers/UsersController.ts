@@ -11,7 +11,7 @@ class UsersController {
 
         const { username } = req.query
 
-        if (!username) return res.error(400, 'Nenhum usuário informado')
+        if (!username) return res.error(400, 'No username informed')
         
         try {
             

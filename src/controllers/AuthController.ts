@@ -83,9 +83,8 @@ class AuthController {
         try {
             
             const schema = Yup.object().shape({
-                username: Yup.string().required('Usuário requerido'),
-                password: Yup.string().required('Senha requerida').min(6, 'A senha precisa conter pelo menos 6 caracteres'),
-                firstName: Yup.string().required('Primeiro nome requerido')
+                username: Yup.string().required('Username required'),
+                password: Yup.string().required('Password required').min(6, 'Password must be at least 6 characters long')
             })
             
             await schema.validate(data)
@@ -95,14 +94,14 @@ class AuthController {
             // In order to perform an OR select, pass an array to the where property to findOne or find
             const userAreadyExists = await usersRepository.findOne({ username: data.username })
 
-            if (userAreadyExists) return res.error(409, 'Este usuário já foi cadastrado')
+            if (userAreadyExists) return res.error(409, 'This user already exists')
 
             const [user] = usersRepository.create([data])
             
             // Encrypt password using bcrypt
             user.password = await BcryptUtils.getHashedString(SHA256(user.password))
 
-            const result = await usersRepository.save(user)
+            const { password, ...result } = await usersRepository.save(user)
 
             Server.logAction(req.user?.username || user.username, 'New account created')
             

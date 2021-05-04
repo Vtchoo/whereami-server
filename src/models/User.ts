@@ -16,12 +16,6 @@ class User {
 	@Column()
 	email: string
 
-	@Column({ select: false })
-	fullName: string
-	
-    @Column({ select: false })
-    cpf: string
-
     @Column({ insert: false })
     isActive: boolean
 
