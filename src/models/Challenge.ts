@@ -38,9 +38,6 @@ class Challenge {
 	})
     locations: Location[]
 
-    constructor() {
-        this.uuid = uuid()
-    }
 }
 
 export { Challenge }
