@@ -9,8 +9,8 @@ export class CreateLocations1620344146717 implements MigrationInterface {
                 columns: [
                     { name: 'id', type: 'int', isPrimary: true, isGenerated: true, generationStrategy: 'increment' },
                     { name: 'pano', type: 'varchar', isUnique: true },
-                    { name: 'description', type: 'varchar' },
-                    { name: 'shortDescription', type: 'varchar' },
+                    { name: 'description', type: 'varchar', isNullable: true },
+                    { name: 'shortDescription', type: 'varchar', isNullable: true },
                     { name: 'lat', type: 'double' },
                     { name: 'lng', type: 'double' }
                 ]
