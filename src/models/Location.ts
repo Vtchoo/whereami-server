@@ -20,6 +20,9 @@ class Location {
     @Column()
     description: string
 
+    @Column()
+    shortDescription: string
+
     @ManyToMany(() => Challenge, challenge => challenge.locations)
 	@JoinTable({
 		name: 'challenges_locations',
