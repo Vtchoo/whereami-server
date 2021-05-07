@@ -19,11 +19,11 @@ class AuthController {
         const { ip } = req
         const ipStatus = BruteForceProtection.getIpStatus(ip)
 
-        if (!ipStatus.isAllowed) return res.error(403, `Muitas tentativas de login, espere ${ipStatus.wait} segundos e tente novamente`, { wait: ipStatus.wait })
+        if (!ipStatus.isAllowed) return res.error(403, `Too many login attempts, wait ${ipStatus.wait} seconds and try again`, { wait: ipStatus.wait })
 
         const { username, password } = req.body
 
-        if (!username || !password) return res.error(400, 'Usuário ou senha não informados')
+        if (!username || !password) return res.error(400, 'Missing user or password')
 
         try {
             
@@ -39,18 +39,18 @@ class AuthController {
                 .where("u.username = :username", { username })
                 .getOne()
 
-            if (!result) return res.error(404, 'Usuário não encontrado')
+            if (!result) return res.error(404, 'User not found')
             
             const { password: hashedPassword, ...user } = result
             
-            if(!user.isActive) return res.error(401, 'Este usuário não está ativo')
+            if(!user.isActive) return res.error(401, 'This user is not active')
 
             const matches = await bcrypt.compare(SHA256(password), hashedPassword)
 
             if (!matches) {
                 BruteForceProtection.registerFailedAttempt(ip)
                 Server.logAction(username, `Unsuccessful login attempt`)
-                return res.error(401, 'Senha incorreta')
+                return res.error(401, 'Incorrect password')
             }
             
             BruteForceProtection.resetIpStatus(ip)

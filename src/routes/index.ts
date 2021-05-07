@@ -4,6 +4,8 @@ import Auth from '../system/Auth'
 
 import users from './users'
 
+import challenges from './challenges'
+
 const router = Router({ mergeParams: true })
 
 router.post('/login', AuthController.Login)
@@ -20,6 +22,7 @@ router.use(Auth.verifyAccess)
 
 router.use('/users', users)
 
+router.use('/challenges', challenges)
 
 
 export default router

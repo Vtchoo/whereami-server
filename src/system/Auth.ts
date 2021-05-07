@@ -69,7 +69,7 @@ class Auth {
         
         const { refreshToken } = req.body
 
-        if (!refreshToken) return res.error(400, 'Nenhum token fornecido')
+        if (!refreshToken) return res.error(400, 'No token supplied')
         
         try {
             
@@ -81,18 +81,18 @@ class Auth {
             const { sub, jti } = tokenPayload
 
             // Check if token can be identified
-            if(!jti) return res.error(400, 'Token inválido')
+            if(!jti) return res.error(400, 'Invalid token')
 
             // Check if token is listed as revoked
-            if (Auth.revokedTokens[jti]) return res.error(400, 'Token inválido')
+            if (Auth.revokedTokens[jti]) return res.error(400, 'Invalid token')
 
             // Get user info from database
             const usersRepository = getCustomRepository(UsersRepository)
-            const user = await usersRepository.findById(sub, { relations: ['permissions', 'profiles', 'profiles.permissions'] })
+            const user = await usersRepository.findById(sub, { relations: [] })
 
-            if (!user) return res.error(404, 'Usuário informado não é válido')
+            if (!user) return res.error(404, 'Invalid user supplied')
             
-            if (!user.isActive) return res.error(401, 'Este usuário não está ativo')
+            if (!user.isActive) return res.error(401, 'This user is not active')
             
             // Pass user info to next routes
             req.user = user
@@ -101,8 +101,8 @@ class Auth {
 
         } catch (error) {
             
-            if (error instanceof TokenExpiredError) return res.error(403, 'Token expirado')
-            if (error instanceof JsonWebTokenError) return res.error(400, 'Token inválido')
+            if (error instanceof TokenExpiredError) return res.error(403, 'Expired token')
+            if (error instanceof JsonWebTokenError) return res.error(400, 'Invalid token')
 
             console.log(error)
             return res.sendStatus(500)
@@ -117,11 +117,11 @@ class Auth {
         // No need for cookie parser when using header
         const { authorization } = req.headers
         
-        if (!authorization) return res.status(401).json({ error: 'Nenhuma credencial informada' })
+        if (!authorization) return res.status(401).json({ error: 'No credentials supplied' })
 
         const [method, token] = authorization.split(' ')
 
-        if (!token) return res.status(401).json({ error: 'Nenhuma credencial informada' })
+        if (!token) return res.status(401).json({ error: 'No credentials supplied' })
         
         try {
     
@@ -135,11 +135,11 @@ class Auth {
 
             // Get user info from database
             const usersRepository = getCustomRepository(UsersRepository)
-            const user = await usersRepository.findById(sub, { relations: ['permissions', 'profiles', 'profiles.permissions'] })
+            const user = await usersRepository.findById(sub, { relations: [] })
 
-            if (!user) return res.error(404, 'Usuário informado no token é inválido')
+            if (!user) return res.error(404, 'Invalid user supplied')
             
-            if (!user.isActive) return res.error(401, 'Este usuário não está ativo')
+            if (!user.isActive) return res.error(401, 'This user is not active')
             
             // Pass user info to next routes
             req.user = user
@@ -148,8 +148,8 @@ class Auth {
             
         } catch (error) {
 
-            if (error instanceof TokenExpiredError) return res.error(403, 'Token expirado')
-            if (error instanceof JsonWebTokenError) return res.error(400, 'Token inválido')
+            if (error instanceof TokenExpiredError) return res.error(403, 'Expired token')
+            if (error instanceof JsonWebTokenError) return res.error(400, 'Invalid token')
 
             console.log(error)
             return res.sendStatus(500)
