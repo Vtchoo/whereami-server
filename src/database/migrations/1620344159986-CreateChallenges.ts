@@ -10,7 +10,7 @@ export class CreateChallenges1620344159986 implements MigrationInterface {
                     { name: 'id', type: 'int', isPrimary: true, isGenerated: true, generationStrategy: 'increment' },
                     { name: 'uuid', type: 'varchar', isUnique: true },
                     { name: 'isPrivate', type: 'boolean', default: true },
-                    { name: 'time', type: 'int', default: 2 * 60 * 1000 },
+                    { name: 'time', type: 'int', default: 2 * 60 },
                     { name: 'createdBy', type: 'int', isNullable: true },
                     { name: 'createdAt', type: 'timestamp', isGenerated: true, default: 'NOW()' },
                     { name: 'expiresAt', type: 'timestamp', isNullable: true }
