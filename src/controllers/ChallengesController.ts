@@ -68,7 +68,7 @@ class ChallengesController {
 
     static async findByKey(req: Request, res: Response, next: NextFunction) {
 
-        const { key } = req.params
+        const { challengeKey: key } = req.params
         const { pregame } = req.query
 
         if(!key) return res.error(400, 'Invalid challenge key')
@@ -77,15 +77,27 @@ class ChallengesController {
             
             const challengesRepository = getChallengesRepository()
 
-            const foundChallenge = await challengesRepository.findOne({ where: { key }, relations: ['locations'] })
+            const challenge = await challengesRepository.findOne({ where: { key }, relations: ['challengeLocations', 'challengeLocations.location'] })
 
-            if (!foundChallenge) return res.error(404, 'Challenge not found')
-            
-            const { locations: challengeLocations, ...challenge } = foundChallenge
+            if (!challenge) return res.error(404, 'Challenge not found')
 
-            const locations = pregame ? challengeLocations.map(l => ({ id: l.id, pano: l.pano })) : challengeLocations
+            if (pregame)
+                challenge.challengeLocations = challenge.challengeLocations.map(challengeLocation => (
+                    {
+                        id: challengeLocation.id,
+                        location: { pano: challengeLocation.location?.pano || '' }
+                    }
+                ))
+            // const { challengeLocations, ...challenge } = foundChallenge
 
-            return res.json({ ...challenge, locations })
+            // const hiddenLocations = pregame ? challengeLocations.map(cl => ({
+            //     id: cl.id,
+            //     location: {
+            //         pano: cl.location?.pano
+            //     }
+            // })) : challengeLocations
+
+            return res.json(challenge)
 
         } catch (error) {
             console.log(error)
