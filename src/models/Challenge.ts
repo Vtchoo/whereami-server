@@ -9,8 +9,11 @@ class Challenge {
     id: number
 
     @Index({ unique: true })
-    @Column()
-    uuid: string
+    @Column({ name: 'challengeKey' })
+    key: string
+
+    @Column({ nullable: true })
+    regionID?: number
 
     @Column()
     time: number

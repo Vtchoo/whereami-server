@@ -26,9 +26,9 @@ class ChallengesController {
 
                 // Generates unique identifier for the challenge
                 // use smaller string if needed
-                newChallenge.uuid = uuid()
+                newChallenge.key = uuid()
 
-                existingChallenge = await challengesRepository.findOne({ where: { uuid: newChallenge.uuid } })
+                existingChallenge = await challengesRepository.findOne({ where: { key: newChallenge.key } })
 
             } while (existingChallenge);
 
@@ -59,6 +59,33 @@ class ChallengesController {
             await challengesLocationsRepository.save(challengeLocations)
 
             return res.json(newChallenge)
+
+        } catch (error) {
+            console.log(error)
+            return res.error(500, 'Internal server error')
+        }
+    }
+
+    static async findByKey(req: Request, res: Response, next: NextFunction) {
+
+        const { key } = req.params
+        const { pregame } = req.query
+
+        if(!key) return res.error(400, 'Invalid challenge key')
+
+        try {
+            
+            const challengesRepository = getChallengesRepository()
+
+            const foundChallenge = await challengesRepository.findOne({ where: { key }, relations: ['locations'] })
+
+            if (!foundChallenge) return res.error(404, 'Challenge not found')
+            
+            const { locations: challengeLocations, ...challenge } = foundChallenge
+
+            const locations = pregame ? challengeLocations.map(l => ({ id: l.id, pano: l.pano })) : challengeLocations
+
+            return res.json({ ...challenge, locations })
 
         } catch (error) {
             console.log(error)
