@@ -1,6 +1,7 @@
-import { Column, CreateDateColumn, Entity, Index, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, CreateDateColumn, Entity, Index, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 import { Location } from './Location'
 import {v4 as uuid } from 'uuid'
+import { ChallengeLocation } from './ChallengeLocation'
 
 @Entity('challenges')
 class Challenge {
@@ -27,19 +28,22 @@ class Challenge {
     @Column()
     expiresAt?: Date
 
-    @ManyToMany(() => Location, location => location.challenges)
-	@JoinTable({
-		name: 'challenges_locations',
-		joinColumn: {
-			name: 'challengeId',
-			referencedColumnName: 'id',
-		},
-		inverseJoinColumn: {
-			name: 'locationId',
-			referencedColumnName: 'id',
-		},
-	})
-    locations: Location[]
+    @OneToMany(() => ChallengeLocation, challengeLocation => challengeLocation.challenge)
+    challengeLocations: ChallengeLocation[]
+    
+    // @ManyToMany(() => Location, location => location.challenges)
+	// @JoinTable({
+	// 	name: 'challenges_locations',
+	// 	joinColumn: {
+	// 		name: 'challengeId',
+	// 		referencedColumnName: 'id',
+	// 	},
+	// 	inverseJoinColumn: {
+	// 		name: 'locationId',
+	// 		referencedColumnName: 'id',
+	// 	},
+	// })
+    // locations: Location[]
 
 }
 

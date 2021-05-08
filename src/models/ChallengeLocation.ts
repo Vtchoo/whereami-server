@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { Challenge } from './Challenge'
+import { Location } from './Location'
 
 @Entity('challenges_locations')
 class ChallengeLocation {
@@ -6,11 +8,19 @@ class ChallengeLocation {
     @PrimaryGeneratedColumn('increment')
     id?: number
 
-    @Column()
-    challengeId: number
+    @Column({ nullable: false })
+    challengeId?: number
 
-    @Column()
-    locationId: number
+    @Column({ nullable: false })
+    locationId?: number
+
+    @ManyToOne(() => Challenge)
+    @JoinColumn({ name: 'challengeId', referencedColumnName: 'id' })
+    challenge?: Challenge
+
+    @ManyToOne(() => Location)
+    @JoinColumn({ name: 'locationId', referencedColumnName: 'id' })
+    location?: Location
 }
 
 export { ChallengeLocation }
