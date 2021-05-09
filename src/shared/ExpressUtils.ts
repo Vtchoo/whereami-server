@@ -15,9 +15,9 @@ class ExpressUtils {
             
             if (!message && !payload) return res.sendStatus(status)
 
-            const json: any = { message }
+            let json: any = { message }
 
-            if (payload) json.data = payload
+            if (payload) json = { ...json, ...payload }
             
             return res.status(status).json(json)
         }

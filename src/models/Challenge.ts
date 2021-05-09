@@ -1,7 +1,8 @@
-import { Column, CreateDateColumn, Entity, Index, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, CreateDateColumn, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 import { Location } from './Location'
 import {v4 as uuid } from 'uuid'
 import { ChallengeLocation } from './ChallengeLocation'
+import { Region } from './Region'
 
 @Entity('challenges')
 class Challenge {
@@ -14,7 +15,7 @@ class Challenge {
     key: string
 
     @Column({ nullable: true })
-    regionID?: number
+    regionId?: number
 
     @Column()
     time: number
@@ -31,6 +32,10 @@ class Challenge {
     @OneToMany(() => ChallengeLocation, challengeLocation => challengeLocation.challenge)
     challengeLocations: ChallengeLocation[]
     
+    @ManyToOne(() => Region)
+    @JoinColumn({ name: 'regionId', referencedColumnName: 'id' })
+    region?: Region
+
     // @ManyToMany(() => Location, location => location.challenges)
 	// @JoinTable({
 	// 	name: 'challenges_locations',

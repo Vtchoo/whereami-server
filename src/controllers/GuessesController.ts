@@ -4,6 +4,22 @@ import { getGuessesRepository } from '../repositories/GuessesRepository'
 
 class GuessesController {
 
+    static async find(req: Request, res: Response, next: NextFunction) {
+
+        const { ...search } = { ...req.query, ...req.params }
+
+        try {
+            
+            const guesses = getGuessesRepository().find({ where: search })
+
+            return res.json({ results: guesses })
+
+        } catch (error) {
+            console.log(error)
+            return res.error(500, 'Internal server error')
+        }
+    }
+
     static async submit(req: Request, res: Response, next: NextFunction) {
 
         const key = req.params.challengeKey || req.body.challengeKey
@@ -28,9 +44,9 @@ class GuessesController {
 
             const existingGuess = await guessesRepository.count({ where: { challengeLocationId, guessedBy: req.user.id } })
 
-            if (!existingGuess) return res.error(403, 'Double guess detected')
+            if (existingGuess) return res.error(403, 'No double guess allowed', { skip: true })
             
-            const newGuess = guessesRepository.create([{ ...guess, challengeLocationId }])
+            const [newGuess] = guessesRepository.create([{ ...guess, challengeLocationId, guessedBy: req.user.id }])
 
             await guessesRepository.save(newGuess)
 

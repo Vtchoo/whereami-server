@@ -5,6 +5,7 @@ import Auth from '../system/Auth'
 import users from './users'
 
 import challenges from './challenges'
+import challengeLocations from './challengelocations'
 
 const router = Router({ mergeParams: true })
 
@@ -24,5 +25,6 @@ router.use('/users', users)
 
 router.use('/challenges', challenges)
 
+router.use('/challengelocations', challengeLocations)
 
 export default router

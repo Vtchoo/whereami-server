@@ -1,5 +1,6 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 import { Challenge } from './Challenge'
+import { Guess } from './Guess'
 import { Location } from './Location'
 
 @Entity('challenges_locations')
@@ -21,6 +22,9 @@ class ChallengeLocation {
     @ManyToOne(() => Location)
     @JoinColumn({ name: 'locationId', referencedColumnName: 'id' })
     location?: Location
+
+    @OneToMany(() => Guess, guess => guess.challengeLocation)
+    guesses?: Guess[]
 }
 
 export { ChallengeLocation }

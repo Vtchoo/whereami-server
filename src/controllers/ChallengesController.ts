@@ -69,15 +69,19 @@ class ChallengesController {
     static async findByKey(req: Request, res: Response, next: NextFunction) {
 
         const { challengeKey: key } = req.params
-        const { pregame } = req.query
+        const { pregame, guesses, guessuser } = req.query
 
-        if(!key) return res.error(400, 'Invalid challenge key')
+        if (!key) return res.error(400, 'Invalid challenge key')
+
+        const relations = ['region', 'challengeLocations', 'challengeLocations.location']
+        if (guesses) relations.push('challengeLocations.guesses')
+        if (guessuser) relations.push('challengeLocations.guesses.user')
 
         try {
             
             const challengesRepository = getChallengesRepository()
 
-            const challenge = await challengesRepository.findOne({ where: { key }, relations: ['challengeLocations', 'challengeLocations.location'] })
+            const challenge = await challengesRepository.findOne({ where: { key }, relations })
 
             if (!challenge) return res.error(404, 'Challenge not found')
 

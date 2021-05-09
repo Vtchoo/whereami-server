@@ -30,14 +30,22 @@ class UsersController {
 
     static async Find(req: Request, res: Response, next: NextFunction) {
         
-        const { password, ...query } = req.query
+        const { password, ids, ...query } = req.query
+
+        const userIds = String(ids)
 
         try {
+
+            console.log(query)
             
             const usersRepository = getCustomRepository(UsersRepository)
     
-            const users = await usersRepository.find({ where: query/*, relations: ['permissions'] */})
-
+            let users
+            if(!ids)
+                users = await usersRepository.find({ where: query/*, relations: ['permissions'] */ })
+            else
+                users = await usersRepository.findByIds(userIds.split(','))
+            
             return res.json(users)
             
         } catch (error) {
