@@ -29,9 +29,14 @@ server.use(ExpressUtils.cookieParser)
 // Use error handler
 server.use(ExpressUtils.httpErrorHandler)
 
+
+var publicDir = (__dirname + '/public/');
+server.use('/', express.static(publicDir));
+
 // API routes
 server.use('/api', routes)
 
+server.get('/status', (req, res) => { return res.json({ status: 'ONLINE' }) })
 
 // Startup server
 server.listen(process.env.PORT || 3000, () => {
