@@ -35,8 +35,6 @@ class UsersController {
         const userIds = String(ids)
 
         try {
-
-            console.log(query)
             
             const usersRepository = getCustomRepository(UsersRepository)
     
