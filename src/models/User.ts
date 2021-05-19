@@ -1,4 +1,5 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn, JoinColumn, OneToMany, ManyToMany, ManyToOne, JoinTable } from "typeorm"
+import { Location } from "./Location"
 
 @Entity('users')
 class User {
@@ -24,6 +25,20 @@ class User {
 
     @UpdateDateColumn()
     updatedAt: Date
+
+    @ManyToMany(() => Location, location => location.users)
+    @JoinTable({
+        name: 'users_locations',
+        joinColumn: {
+            name: 'userId',
+            referencedColumnName: 'id'
+        },
+        inverseJoinColumn: {
+            name: 'locationId',
+            referencedColumnName: 'id'
+        }
+    })
+    locations: Location[]
 
     constructor() {
         

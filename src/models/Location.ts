@@ -1,6 +1,7 @@
 import { Column, Entity, Index, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 import { Challenge } from './Challenge'
 import { ChallengeLocation } from './ChallengeLocation'
+import { User } from './User'
 
 @Entity('locations')
 class Location {
@@ -27,6 +28,8 @@ class Location {
     @OneToMany(() => ChallengeLocation, challengeLocation => challengeLocation.location)
     challengeLocations?: ChallengeLocation[]
 
+    @ManyToMany(() => User, user => user.locations)
+    users?: User[]
     // @ManyToMany(() => Challenge, challenge => challenge.locations)
 	// @JoinTable({
 	// 	name: 'challenges_locations',
