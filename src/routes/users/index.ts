@@ -7,8 +7,11 @@ const router = Router({ mergeParams: true })
 
 router.get('/', UsersController.Find)
 
-router.use('/locations', LocationsController.myLocations)
-// router.post('/', UsersController.Create)
+router.get('/locations', LocationsController.myLocations)
+
+router.post('/locations/:locationId', LocationsController.addLocationBookmark)
+
+router.delete('/locations/:locationId', LocationsController.removeLocationBookmark)
 
 router.get('/:userId', UsersController.FindById)
 

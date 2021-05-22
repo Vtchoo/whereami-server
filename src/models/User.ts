@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn, JoinColumn, OneToMany, ManyToMany, ManyToOne, JoinTable } from "typeorm"
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn, JoinColumn, OneToMany, ManyToMany, ManyToOne, JoinTable, RelationId } from "typeorm"
 import { Location } from "./Location"
 
 @Entity('users')
@@ -25,6 +25,9 @@ class User {
 
     @UpdateDateColumn()
     updatedAt: Date
+
+    @RelationId((user: User) => user.locations)
+    myLocationIds: number[]
 
     @ManyToMany(() => Location, location => location.users)
     @JoinTable({
