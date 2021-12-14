@@ -31,11 +31,6 @@ class AuthController {
 
             const result = await usersRepository.createQueryBuilder('u')
                 .addSelect('u.password')
-
-                // Needs update to MariaDB 10.5.0+
-                // .leftJoin('u.permissions', 'p')
-                // .addSelect('JSON_ARRAYAGG(p.code)', 'permissions')
-
                 .where("u.username = :username", { username })
                 .getOne()
 

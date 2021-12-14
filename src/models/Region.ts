@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { Square } from './Square'
 
 @Entity('regions')
 class Region {
@@ -8,6 +9,15 @@ class Region {
 
     @Column()
     name: string
+
+    @Column()
+    regionType?: string
+
+    @Column()
+    regionCode?: string
+
+    @OneToMany(() => Square, square => square.region)
+    squares: Square[]
 }
 
 export { Region }

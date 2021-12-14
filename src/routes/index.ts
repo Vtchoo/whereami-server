@@ -6,6 +6,7 @@ import users from './users'
 
 import challenges from './challenges'
 import challengeLocations from './challengelocations'
+import regions from './regions'
 
 const router = Router({ mergeParams: true })
 
@@ -26,5 +27,7 @@ router.use('/users', users)
 router.use('/challenges', challenges)
 
 router.use('/challengelocations', challengeLocations)
+
+router.use('/regions', regions)
 
 export default router
